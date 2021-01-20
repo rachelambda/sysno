@@ -1,0 +1,40 @@
+#!/bin/sh
+put() printf '%s\n' "$*"
+die() {
+	printf '%s\n' "$*"
+	exit 1
+}
+
+get_def() {
+	[ -f "/usr/include/asm/unistd$2.h" ] || return 1
+	while read -r line; do
+		case "$line" in
+			"#define __NR_$1 "*)
+				put "${2#_}: ${line#\#define __NR_$1 }"
+				return 0
+				;;
+		esac
+	done < "/usr/include/asm/unistd$2.h"
+	return 1
+}
+
+[ "$1" ] || die "Usage: ${0#*/} SYSCALL [32/64]"
+
+case "$2" in
+	32)
+		get_def "$1" _32 || die "not found"
+		;;
+	64)
+		get_def "$1" _64 || die "not found"
+		;;
+	*)
+		status=0
+		get_def "$1" _32
+		: $(( status += $? ))
+
+		get_def "$1" _64
+		: $(( status += $? ))
+
+		exit "$status"
+		;;
+esac

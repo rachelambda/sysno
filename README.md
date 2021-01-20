@@ -4,11 +4,15 @@ A simple shellscript for extracting Linux syscall numbers from headers
 
 installation
 ------------
+```
 make install
+```
 
 usage
 -----
+```
 sysno SYSCALL [32/64]
+```
 
 bugs
 ----

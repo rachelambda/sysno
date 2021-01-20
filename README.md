@@ -1,6 +1,6 @@
 sysno
 =====
-A simple shellscript for extracting Linux syscall numbers from headers 
+Shellscripts for viewing syscall numbers
 
 installation
 ------------

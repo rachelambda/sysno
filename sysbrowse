@@ -1,0 +1,30 @@
+#!/bin/sh
+put() printf '%s\n' "$*"
+die() {
+	printf '%s\n' "$*"
+	exit 1
+}
+
+browse_defs() {
+	[ -f "/usr/include/asm/unistd$2.h" ] || return 1
+	while read -r line; do
+		case "$line" in
+			"#define __NR_"*)
+				name="${line% *}"
+				put "${name#\#define __NR_}: ${line#\#define __NR_* }"
+				;;
+		esac
+	done < "/usr/include/asm/unistd$2.h" | "${PAGER:-less}"
+	return 1
+}
+
+case "$1" in
+	32)
+		browse_defs "$1" _32 || die "not found"
+		;;
+	64)
+		browse_defs "$1" _64 || die "not found"
+		;;
+	*)
+		die "Usage: ${0#*/} 32/64"
+esac

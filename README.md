@@ -10,8 +10,14 @@ make install
 
 usage
 -----
+Get syscall number for a specific syscall
 ```
 sysno SYSCALL [32/64]
+```
+
+Browse syscalls in pager
+```
+sysbrowse 32/64
 ```
 
 bugs
